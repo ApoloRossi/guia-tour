@@ -53,25 +53,25 @@ class MainActivity : ComponentActivity() {
     private fun MainContent() {
         val onActionClick: () -> Unit = {}
 
-        Scaffold(
-            topBar = {
-                TopAppBar()
-            }, floatingActionButton = { MainFab() }
-        ) {
+        Scaffold(topBar = {
+            TopAppBar()
+        }, floatingActionButton = { MainFab() }) {
             //Create a container that uses SearchInputField and HorizontalScrollableListComponentWithNameAndPicture
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .padding(it)) {
+                    .padding(it)
+            ) {
                 SearchInputField()
                 createAnHorizontalScrollableListComponentWithNameAndPicture(
                     listOf(
                         listOf(
-                            "Jaraguá",
-                            "Ibirapuera"
-                        )
+                            "Jaraguá", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"
+                        ),
+                        listOf("Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
+                        listOf("Aspicueta", "Aspicueta", "Ibirapuera", "Ibirapuera", "Ibirapuera")
                     )
-                ) //, listOf("Ibirapuera", "Ibirapuera" ), listOf("Aspicueta", "Aspicueta")
+                )
             }
         }
     }
@@ -96,22 +96,18 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun createAnHorizontalListComponentWithNameAndPicture(name: String) {
         Column(
-            modifier = Modifier
-                .padding(8.dp), //.horizontalScroll(rememberScrollState())
+            modifier = Modifier.padding(8.dp), //.horizontalScroll(rememberScrollState())
             horizontalAlignment = Alignment.Start
         ) {
 
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = "Picture",
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier.size(110.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = name,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
+                text = name, fontSize = 16.sp, fontWeight = FontWeight.Normal, color = Color.Black
             )
 
         }
@@ -133,7 +129,7 @@ class MainActivity : ComponentActivity() {
                 .fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
 
-        )
+            )
     }
 
     @Composable
