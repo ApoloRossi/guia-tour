@@ -5,12 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -19,7 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,15 +32,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        //WindowCompat.setDecorFitsSystemWindows(window, false)
-
         setContent {
             GuiaTourTheme {
-                // A surface container using the 'background' color from the theme
-
                 MainContent()
-
             }
         }
     }
@@ -55,15 +46,14 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(topBar = {
             TopAppBar()
-        }, floatingActionButton = { MainFab() }) {
-            //Create a container that uses SearchInputField and HorizontalScrollableListComponentWithNameAndPicture
+        }) {
             Column(
                 Modifier
                     .fillMaxWidth()
                     .padding(it)
             ) {
                 SearchInputField()
-                createAnHorizontalScrollableListComponentWithNameAndPicture(
+                generateCategoriesList(
                     listOf(
                         listOf("Jaraguá", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
                         listOf("Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
@@ -75,35 +65,43 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun createAnHorizontalScrollableListComponentWithNameAndPicture(lists: List<List<String>>) {
+    fun generateCategoriesList(lists: List<List<String>>) {
         LazyColumn {
             items(lists.size) { index ->
-                Text(
-                    text = "Parques",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    modifier = Modifier.padding(8.dp))
-                LazyRow(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                ) {
-                    items(lists[index].size) { subListIndex ->
-                        createAnHorizontalListComponentWithNameAndPicture(lists[index][subListIndex])
-                    }
-                }
+                createCategorySection(lists, index)
             }
         }
     }
 
     @Composable
-    fun createAnHorizontalListComponentWithNameAndPicture(name: String) {
+    private fun createCategorySection(
+        categories: List<List<String>>,
+        index: Int
+    ) {
+        Text(
+            text = "Parques",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier.padding(8.dp)
+        )
+        LazyRow(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            items(categories[index].size) { place ->
+                createPlacesListForCategory(categories[index][place])
+            }
+        }
+    }
+
+    @Composable
+    fun createPlacesListForCategory(name: String) {
         Column(
-            modifier = Modifier.padding(8.dp), //.horizontalScroll(rememberScrollState())
+            modifier = Modifier.padding(8.dp).clickable { showDetail() },
             horizontalAlignment = Alignment.Start
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = "Picture",
@@ -113,10 +111,8 @@ class MainActivity : ComponentActivity() {
             Text(
                 text = name, fontSize = 16.sp, fontWeight = FontWeight.Normal, color = Color.Black
             )
-
         }
     }
-
 
     @Composable
     private fun SearchInputField() {
@@ -152,28 +148,11 @@ class MainActivity : ComponentActivity() {
                     fontSize = 30.sp,
                     color = Color.Black,
                     style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
-
                 )
                 Text(
                     text = "Filtrar", color = GreenApp
                 )
             }
-        }
-        /*
-
-        Row(
-            Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            Text(text = "Guia Tour")
-            Text(text = "Filtrar")
-        }*/
-    }
-
-    @Composable
-    fun MainFab() {
-        FloatingActionButton(onClick = { showDetail() }) {
-            Icon(imageVector = Icons.Filled.Call, "")
         }
     }
 
@@ -181,6 +160,3 @@ class MainActivity : ComponentActivity() {
         startActivity(Intent(this, PlaceDetail::class.java))
     }
 }
-
-
-
