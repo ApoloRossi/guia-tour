@@ -65,9 +65,7 @@ class MainActivity : ComponentActivity() {
                 SearchInputField()
                 createAnHorizontalScrollableListComponentWithNameAndPicture(
                     listOf(
-                        listOf(
-                            "Jaraguá", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"
-                        ),
+                        listOf("Jaraguá", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
                         listOf("Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
                         listOf("Aspicueta", "Aspicueta", "Ibirapuera", "Ibirapuera", "Ibirapuera")
                     )
@@ -80,6 +78,12 @@ class MainActivity : ComponentActivity() {
     fun createAnHorizontalScrollableListComponentWithNameAndPicture(lists: List<List<String>>) {
         LazyColumn {
             items(lists.size) { index ->
+                Text(
+                    text = "Parques",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.padding(8.dp))
                 LazyRow(
                     modifier = Modifier
                         .padding(8.dp)
