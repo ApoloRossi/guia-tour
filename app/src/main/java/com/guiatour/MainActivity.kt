@@ -4,23 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +49,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
+    @Preview
     private fun MainContent() {
         val onActionClick: () -> Unit = {}
 
@@ -55,40 +58,84 @@ class MainActivity : ComponentActivity() {
                 TopAppBar()
             }, floatingActionButton = { MainFab() }
         ) { padding ->
-            Row(
-                Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal,
-                        ),
-                    ),
-            ) {
-                Column(Modifier.fillMaxSize()) {
-                    /*CenterAlignedTopAppBar(
-                                    title = { Text(text = stringResource(id = R.string.app_name)) },
-                                    actions = {
-                                        IconButton(onClick = onActionClick) {
-                                            Icon(
-                                                imageVector = Icons.Rounded.Settings,
-                                                contentDescription = "",
-                                                tint = MaterialTheme.colors.onPrimary,
-                                            )
-                                        }
-                                    },
-                                    *//*  colors = colors,
-                                          modifier = modifier.testTag("niaTopAppBar"),*//*
-                                    )*/
-                }
-
+            //Create a container that uses SearchInputField and HorizontalScrollableListComponentWithNameAndPicture
+            Column(Modifier.fillMaxWidth()) {
+                SearchInputField(padding)
+                createAnHorizontalScrollableListComponentWithNameAndPicture(listOf(listOf("Jaraguá","Ibirapuera"))) //, listOf("Ibirapuera", "Ibirapuera" ), listOf("Aspicueta", "Aspicueta")
             }
         }
-        //Greeting("Android")
     }
 
     @Composable
-    @Preview
+    fun createAnHorizontalScrollableListComponentWithNameAndPicture(lists: List<List<String>>) {
+        LazyColumn {
+            items(lists.size) { index ->
+                LazyRow(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+                    items(lists[index].size) {subListIndex ->
+                        createAnHorizontalListComponentWithNameAndPicture(lists[index][subListIndex])
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun createAnHorizontalListComponentWithNameAndPicture(name : String) {
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp), //.horizontalScroll(rememberScrollState())
+                    horizontalAlignment = Alignment.Start
+                ) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        contentDescription = "Picture",
+                        modifier = Modifier.size(50.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = name,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+
+                }
+    }
+
+
+    @Composable
+    private fun SearchInputField(padding: PaddingValues) {
+        var inputValue = remember { mutableStateOf("") }
+
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(20.dp))
+                .background(Color.LightGray, shape = RoundedCornerShape(20.dp))
+                .padding(padding)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal,
+                    ),
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray),
+                value = inputValue.value,
+                onValueChange = { newText ->
+                    inputValue.value = newText
+                },
+                placeholder = {Text(text= "Faça a sua busca")}
+            )
+        }
+
+    }
+
+    @Composable
     private fun TopAppBar() {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Row(
@@ -105,7 +152,7 @@ class MainActivity : ComponentActivity() {
                     color = Color.Black,
                     style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
 
-                    )
+                )
                 Text(
                     text = "Filtrar", color = GreenApp
                 )
