@@ -57,11 +57,21 @@ class MainActivity : ComponentActivity() {
             topBar = {
                 TopAppBar()
             }, floatingActionButton = { MainFab() }
-        ) { padding ->
+        ) {
             //Create a container that uses SearchInputField and HorizontalScrollableListComponentWithNameAndPicture
-            Column(Modifier.fillMaxWidth()) {
-                SearchInputField(padding)
-                createAnHorizontalScrollableListComponentWithNameAndPicture(listOf(listOf("Jaraguá","Ibirapuera"))) //, listOf("Ibirapuera", "Ibirapuera" ), listOf("Aspicueta", "Aspicueta")
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(it)) {
+                SearchInputField()
+                createAnHorizontalScrollableListComponentWithNameAndPicture(
+                    listOf(
+                        listOf(
+                            "Jaraguá",
+                            "Ibirapuera"
+                        )
+                    )
+                ) //, listOf("Ibirapuera", "Ibirapuera" ), listOf("Aspicueta", "Aspicueta")
             }
         }
     }
@@ -70,8 +80,12 @@ class MainActivity : ComponentActivity() {
     fun createAnHorizontalScrollableListComponentWithNameAndPicture(lists: List<List<String>>) {
         LazyColumn {
             items(lists.size) { index ->
-                LazyRow(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
-                    items(lists[index].size) {subListIndex ->
+                LazyRow(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
+                    items(lists[index].size) { subListIndex ->
                         createAnHorizontalListComponentWithNameAndPicture(lists[index][subListIndex])
                     }
                 }
@@ -80,59 +94,46 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun createAnHorizontalListComponentWithNameAndPicture(name : String) {
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp), //.horizontalScroll(rememberScrollState())
-                    horizontalAlignment = Alignment.Start
-                ) {
+    fun createAnHorizontalListComponentWithNameAndPicture(name: String) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp), //.horizontalScroll(rememberScrollState())
+            horizontalAlignment = Alignment.Start
+        ) {
 
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
-                        contentDescription = "Picture",
-                        modifier = Modifier.size(50.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = name,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
+            Image(
+                painter = painterResource(id = R.drawable.ic_launcher_background),
+                contentDescription = "Picture",
+                modifier = Modifier.size(50.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = name,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
 
-                }
+        }
     }
 
 
     @Composable
-    private fun SearchInputField(padding: PaddingValues) {
+    private fun SearchInputField() {
         var inputValue = remember { mutableStateOf("") }
 
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(20.dp))
-                .background(Color.LightGray, shape = RoundedCornerShape(20.dp))
-                .padding(padding)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(
-                        WindowInsetsSides.Horizontal,
-                    ),
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.LightGray),
-                value = inputValue.value,
-                onValueChange = { newText ->
-                    inputValue.value = newText
-                },
-                placeholder = {Text(text= "Faça a sua busca")}
-            )
-        }
+        OutlinedTextField(
+            value = inputValue.value,
+            onValueChange = { newText ->
+                inputValue.value = newText
+            },
+            placeholder = { Text(text = "Faça a sua busca") },
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp),
 
+        )
     }
 
     @Composable
