@@ -28,6 +28,13 @@ import com.guiatour.ui.theme.GuiaTourTheme
 
 class MainActivity : ComponentActivity() {
 
+
+    private val allPlaces = listOf(
+    listOf("Jaraguá", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
+    listOf("Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
+    listOf("Aspicueta", "Aspicueta", "Ibirapuera", "Ibirapuera", "Ibirapuera")
+    )
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +52,7 @@ class MainActivity : ComponentActivity() {
         val onActionClick: () -> Unit = {}
 
         Scaffold(topBar = {
-            TopAppBar()
+            TopAppBar("Guia Tour", filter = true)
         }) {
             Column(
                 Modifier
@@ -53,13 +60,7 @@ class MainActivity : ComponentActivity() {
                     .padding(it)
             ) {
                 SearchInputField()
-                generateCategoriesList(
-                    listOf(
-                        listOf("Jaraguá", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
-                        listOf("Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
-                        listOf("Aspicueta", "Aspicueta", "Ibirapuera", "Ibirapuera", "Ibirapuera")
-                    )
-                )
+                generateCategoriesList(allPlaces)
             }
         }
     }
@@ -122,6 +123,9 @@ class MainActivity : ComponentActivity() {
             value = inputValue.value,
             onValueChange = { newText ->
                 inputValue.value = newText
+                //copilot: filter the allPlaces by newText
+                allPlaces.filter { it.contains(newText) }
+
             },
             placeholder = { Text(text = "Faça a sua busca") },
             modifier = Modifier
@@ -132,31 +136,7 @@ class MainActivity : ComponentActivity() {
             )
     }
 
-    @Composable
-    private fun TopAppBar() {
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Olá, Apolo", color = GreenApp)
-                Text(
-                    text = "Guia Tour",
-                    fontSize = 30.sp,
-                    color = Color.Black,
-                    style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text = "Filtrar", color = GreenApp
-                )
-            }
-        }
-    }
-
     private fun showDetail() {
-        startActivity(Intent(this, PlaceDetail::class.java))
+        startActivity(PlaceDetail.newInstance(this, "Ibirapuera"))
     }
 }
