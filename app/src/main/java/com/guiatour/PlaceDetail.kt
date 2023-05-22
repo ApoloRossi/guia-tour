@@ -61,32 +61,30 @@ class PlaceDetail : ComponentActivity() {
     @Preview
     @Composable
     fun PlaceDetailContent() {
-        val placeName = intent.getStringExtra(PARAM)
+        //val placeName = intent.getStringExtra(PARAM)
         Scaffold(topBar = {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .background(colorResource(id = R.color.default_green))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(colorResource(id = R.color.default_green))
 
             ) {
                 IconButton(onClick = { }) {
                     Icon(
-                        modifier = Modifier.align(Alignment.CenterVertically),
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = Color.White,
                     )
                 }
-
                 Text(
                     text = "São Paulo",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally),
+                        .align(Alignment.Center),
                     color = Color.White,
                     style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center)
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
 
             }
 
@@ -102,13 +100,25 @@ class PlaceDetail : ComponentActivity() {
                         .fillMaxWidth()
                         .background(colorResource(id = R.color.default_green))
                 ) {
-                    Box(
+                    Column(
                         Modifier
                             .padding(top = 80.dp)
                             .fillMaxHeight()
                             .fillMaxWidth()
                             .background(Color.White)
-                    )
+                    ) {
+                        Text(
+                            text = "Parque do Ibirapuera",
+                            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
+                            fontSize = 24.sp,
+                            modifier = Modifier.padding(top = 50.dp).align(Alignment.CenterHorizontally)
+                        )
+                        Text(
+                            text = "Tour em Ibirapuera",
+                            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_launcher_background),

@@ -30,9 +30,9 @@ class MainActivity : ComponentActivity() {
 
 
     private val allPlaces = listOf(
-    listOf("Jaraguá", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
+    listOf("JaraguáXXX", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
     listOf("Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
-    listOf("Aspicueta", "Aspicueta", "Ibirapuera", "Ibirapuera", "Ibirapuera")
+    listOf("AspicuetaY", "Aspicueta", "Ibirapuera", "Ibirapuera", "Ibirapuera")
     )
 
     @OptIn(ExperimentalMaterial3Api::class)
