@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
@@ -119,16 +120,8 @@ class PlaceDetail : ComponentActivity() {
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
 
-                       CraneTabBar(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .sizeIn(maxWidth = 500.dp),
-                            onMenuClicked = {}
-                        ) {
-                            CraneTabs(Modifier.fillMaxWidth(), listOf("btn1", "btn2"), CraneScreen.Fly) {
+                        TabBar()
 
-                            }
-                        }
                     }
 
                     Image(
@@ -146,75 +139,109 @@ class PlaceDetail : ComponentActivity() {
         }
     }
 
+
+
+
+
+    /* Create a composable Tab Bar with two dividers. The first one will call 'Posts' and the second 'Photos'
+    * Inside 'Posts' create a red Column layout and for 'Photos' create a blue Column layout.
+    */
     @Composable
-    fun CraneTabBar(
-        modifier: Modifier = Modifier,
-        onMenuClicked: () -> Unit,
-        children: @Composable (Modifier) -> Unit
-    ) {
-        Row(modifier) {
-            // Separate Row as the children shouldn't have the padding
-            Row(Modifier.padding(top = 8.dp)) {
+    fun TabBar() {
+        var selectedTab by remember { mutableStateOf(0) }
+        Column(modifier = Modifier.padding(top = 24.dp)) {
+            TabRow(
+                selectedTabIndex = selectedTab,
+                backgroundColor = Color.White,
+                contentColor = Color.Black,
+                divider = {
 
-            }
-            children(
-                Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-            )
-        }
-    }
-
-  @Composable
-    fun CraneTabs(
-        modifier: Modifier = Modifier,
-        titles: List<String>,
-        tabSelected: CraneScreen,
-        onTabSelected: (CraneScreen) -> Unit
-    ) {
-        TabRow(
-            selectedTabIndex = tabSelected.ordinal,
-            modifier = modifier,
-            contentColor = MaterialTheme.colors.onSurface,
-            indicator = { tabPositions: List<TabPosition> ->
-                Box(
-                    Modifier.tabIndicatorOffset(tabPositions[tabSelected.ordinal])
-                        .fillMaxSize()
-                        .padding(horizontal = 4.dp)
-                        .border(BorderStroke(2.dp, Color.White), RoundedCornerShape(16.dp))
-                )
-            },
-            divider = { }
-        ) {
-            titles.forEachIndexed { index, title ->
-                val selected = index == tabSelected.ordinal
-
-                val textModifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
-
+                }
+            ) {
                 Tab(
+                    selected = selectedTab == 0,
+                    onClick = { selectedTab = 0 },
+                    text = { Text("Posts") },
                     modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .clip(RoundedCornerShape(16.dp)),
-                    selected = selected,
-                    onClick = {
-                        onTabSelected(CraneScreen.values()[index])
+                        .border(
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = Color.Black
+                            ),
+                            shape = RoundedCornerShape(40.dp)
+                        )
+                )
+                Tab(
+                    selected = selectedTab == 1,
+                    onClick = { selectedTab = 1 },
+                    text = { Text("Photos") },
+                    modifier = Modifier
+                        .border(
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = Color.Black
+                            ),
+                            shape = RoundedCornerShape(40.dp)
+                        )
+                )
+            }
+            when (selectedTab) {
+                0 -> {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+
+                        LazyColumn {
+                            items(3) {
+                                //create an image with a title bellow and a description text
+                                Column(
+                                    modifier = Modifier
+                                        .clickable { }
+                                        .fillMaxWidth()
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                                        contentDescription = "image",
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+                                            .width(500.dp)
+                                            .height(300.dp)
+                                            .clip(RoundedCornerShape(20.dp))
+
+                                    )
+                                    Text(
+                                        text = "Title",
+                                        modifier = Modifier
+                                            .padding(top = 16.dp)
+                                            .align(Alignment.CenterHorizontally)
+                                    )
+                                    Text(
+                                        text = "Description",
+                                        modifier = Modifier
+                                            .padding(top = 16.dp)
+                                            .align(Alignment.CenterHorizontally)
+                                    )
+                                }
+                            }
+                        }
                     }
-                ) {
-                    Text(
-                        modifier = textModifier,
-                        text = title.uppercase()
-                    )
+                }
+                1 -> {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+
+                    }
                 }
             }
         }
     }
-
-    enum class CraneScreen {
-        Fly, Sleep, Eat
-    }
-
-
 }
 
 
