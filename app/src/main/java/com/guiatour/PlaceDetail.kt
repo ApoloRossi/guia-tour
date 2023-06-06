@@ -121,7 +121,6 @@ class PlaceDetail : ComponentActivity() {
                         )
 
                         TabBar()
-
                     }
 
                     Image(
@@ -139,34 +138,39 @@ class PlaceDetail : ComponentActivity() {
         }
     }
 
-
-
-
-
-    /* Create a composable Tab Bar with two dividers. The first one will call 'Posts' and the second 'Photos'
-    * Inside 'Posts' create a red Column layout and for 'Photos' create a blue Column layout.
-    */
     @Composable
     fun TabBar() {
         var selectedTab by remember { mutableStateOf(0) }
         Column(modifier = Modifier.padding(top = 24.dp)) {
             TabRow(
+                backgroundColor = Color.LightGray,
+                modifier = Modifier.border(
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = Color.DarkGray
+                    ),
+                    shape = RoundedCornerShape(40.dp)
+                ).clip(RoundedCornerShape(40.dp)),
                 selectedTabIndex = selectedTab,
-                backgroundColor = Color.White,
                 contentColor = Color.Black,
-                divider = {
+                indicator = {
 
                 }
             ) {
                 Tab(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    text = { Text("Posts") },
+                    text = { Text("Posts", color = if (selectedTab == 0) Color.Green else Color.DarkGray) },
                     modifier = Modifier
+                        .padding(2.dp)
+                        .background(
+                            color = if (selectedTab == 0) Color.White else Color.LightGray,
+                            shape = RoundedCornerShape(40.dp)
+                        )
                         .border(
                             border = BorderStroke(
                                 width = 1.dp,
-                                color = Color.Black
+                                color = if (selectedTab == 0) Color.White else Color.LightGray
                             ),
                             shape = RoundedCornerShape(40.dp)
                         )
@@ -174,12 +178,17 @@ class PlaceDetail : ComponentActivity() {
                 Tab(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    text = { Text("Photos") },
+                    text = { Text("Photos", color = if (selectedTab == 1) Color.Green else Color.DarkGray) },
                     modifier = Modifier
+                        .background(
+                            color = if (selectedTab == 1) Color.White else Color.LightGray,
+                            shape = RoundedCornerShape(40.dp)
+                        )
+                        .padding(4.dp)
                         .border(
                             border = BorderStroke(
                                 width = 1.dp,
-                                color = Color.Black
+                                color = if (selectedTab == 1) Color.White else Color.LightGray
                             ),
                             shape = RoundedCornerShape(40.dp)
                         )
@@ -229,6 +238,7 @@ class PlaceDetail : ComponentActivity() {
                         }
                     }
                 }
+
                 1 -> {
                     Column(
                         modifier = Modifier
