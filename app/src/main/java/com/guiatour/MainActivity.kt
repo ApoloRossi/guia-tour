@@ -1,9 +1,9 @@
 package com.guiatour
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,39 +11,39 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.guiatour.ui.theme.GreenApp
 import com.guiatour.ui.theme.GuiaTourTheme
 
 class MainActivity : ComponentActivity() {
 
-
-    private val allPlaces = listOf(
-    listOf("JaraguáXXX", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
-    listOf("Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera", "Ibirapuera"),
-    listOf("AspicuetaY", "Aspicueta", "Ibirapuera", "Ibirapuera", "Ibirapuera")
+    private var allPlaces = listOf(
+        emptyList<String>(),
+        emptyList(),
+        emptyList()
     )
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    private val viewModel : HomeViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            GuiaTourTheme {
+            GuiaTourTheme(darkTheme = true) {
                 MainContent()
             }
         }
+
+        allPlaces = viewModel.fetchPlaces()
+
     }
 
     @Composable
@@ -83,8 +83,8 @@ class MainActivity : ComponentActivity() {
             text = "Parques",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.padding(8.dp)
+            color = MaterialTheme.colors.onPrimary,
+            modifier = Modifier.padding(8.dp),
         )
         LazyRow(
             modifier = Modifier
@@ -100,7 +100,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun createPlacesListForCategory(name: String) {
         Column(
-            modifier = Modifier.padding(8.dp).clickable { showDetail() },
+            modifier = Modifier
+                .padding(8.dp)
+                .clickable { showDetail() },
             horizontalAlignment = Alignment.Start
         ) {
             Image(
@@ -108,9 +110,14 @@ class MainActivity : ComponentActivity() {
                 contentDescription = "Picture",
                 modifier = Modifier.size(110.dp)
             )
+
             Spacer(modifier = Modifier.width(8.dp))
+
             Text(
-                text = name, fontSize = 16.sp, fontWeight = FontWeight.Normal, color = Color.Black
+                text = name,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colors.onPrimary
             )
         }
     }
@@ -125,18 +132,21 @@ class MainActivity : ComponentActivity() {
                 inputValue.value = newText
                 //copilot: filter the allPlaces by newText
                 allPlaces.filter { it.contains(newText) }
-
             },
+            textStyle = TextStyle(color = MaterialTheme.colors.onPrimary),
             placeholder = { Text(text = "Faça a sua busca") },
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
-
-            )
+            shape = RoundedCornerShape(24.dp)
+        )
     }
 
     private fun showDetail() {
-        startActivity(PlaceDetail.newInstance(this, "Ibirapuera"))
+
+        //startActivity PrivatePlace
+        startActivity(PrivatePlace.newInstance(this, "Ibirapuera"))
+        //startActivity(PlaceDetail.newInstance(this, "Ibirapuera"))
     }
+
 }

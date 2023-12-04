@@ -28,7 +28,7 @@ fun TopAppBar(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth()
-                .background(color = color ?: Color.White),
+                .background(color = color ?: MaterialTheme.colors.secondaryVariant),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -43,13 +43,13 @@ fun TopAppBar(
                     )
                 }
             } else {
-                Text(text = "Olá, Apolo", color = GreenApp, modifier = Modifier.align(Alignment.CenterVertically))
+                Text(text = "Olá, Apolo", color = MaterialTheme.colors.onPrimary, modifier = Modifier.align(Alignment.CenterVertically))
             }
 
             Text(
                 text = title,
                 fontSize = 30.sp,
-                color = Color.Black,
+                color = MaterialTheme.colors.onPrimary,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
             )
@@ -57,7 +57,7 @@ fun TopAppBar(
             if (filter) {
                 Text(
                     //align the text to the end of the row
-                    text = "filter", color = GreenApp
+                    text = "filter", color = MaterialTheme.colors.onPrimary
                 )
             }
 
