@@ -1,4 +1,4 @@
-package com.guiatour
+package com.guiatour.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,17 +20,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.guiatour.viewModel.HomeViewModel
+import com.guiatour.R
 import com.guiatour.ui.theme.GuiaTourTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var allPlaces = listOf(
-        emptyList<String>(),
-        emptyList(),
-        emptyList()
-    )
+    private var allPlaces: List<List<String>> by mutableStateOf(emptyList())
 
-    private val viewModel : HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +39,11 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        allPlaces = viewModel.fetchPlaces()
+        viewModel.placesLiveData.observe(this) {
+            allPlaces = it
+        }
+
+        viewModel.fetchPlaces()
 
     }
 
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity() {
         val onActionClick: () -> Unit = {}
 
         Scaffold(topBar = {
-            TopAppBar("Guia Tour", filter = true)
+            com.guiatour.TopAppBar("Guia Tour", filter = true)
         }) {
             Column(
                 Modifier
@@ -60,22 +61,38 @@ class MainActivity : ComponentActivity() {
                     .padding(it)
             ) {
                 SearchInputField()
-                generateCategoriesList(allPlaces)
+
+                if (allPlaces.isEmpty()) {
+                    LoaderComponent()
+                } else {
+                    CategoriesList(allPlaces)
+                }
+
             }
         }
     }
 
     @Composable
-    fun generateCategoriesList(lists: List<List<String>>) {
+    fun LoaderComponent() {
+        Column(Modifier.fillMaxWidth(1f), Arrangement.Center, Alignment.CenterHorizontally) {
+            CircularProgressIndicator(
+                modifier = Modifier.width(64.dp),
+                color = MaterialTheme.colors.secondary,
+            )
+        }
+    }
+
+    @Composable
+    fun CategoriesList(lists: List<List<String>>) {
         LazyColumn {
             items(lists.size) { index ->
-                createCategorySection(lists, index)
+                CategorySection(lists, index)
             }
         }
     }
 
     @Composable
-    private fun createCategorySection(
+    private fun CategorySection(
         categories: List<List<String>>,
         index: Int
     ) {
@@ -92,13 +109,13 @@ class MainActivity : ComponentActivity() {
                 .fillMaxWidth()
         ) {
             items(categories[index].size) { place ->
-                createPlacesListForCategory(categories[index][place])
+                PlacesListForCategory(categories[index][place])
             }
         }
     }
 
     @Composable
-    fun createPlacesListForCategory(name: String) {
+    fun PlacesListForCategory(name: String) {
         Column(
             modifier = Modifier
                 .padding(8.dp)
@@ -145,7 +162,7 @@ class MainActivity : ComponentActivity() {
     private fun showDetail() {
 
         //startActivity PrivatePlace
-        startActivity(PrivatePlace.newInstance(this, "Ibirapuera"))
+        startActivity(PrivatePlaceActivity.newInstance(this, "Ibirapuera"))
         //startActivity(PlaceDetail.newInstance(this, "Ibirapuera"))
     }
 

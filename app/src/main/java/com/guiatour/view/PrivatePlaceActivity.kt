@@ -1,4 +1,4 @@
-package com.guiatour
+package com.guiatour.view
 
 import android.content.Context
 import android.content.Intent
@@ -24,15 +24,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.guiatour.R
 import com.guiatour.ui.theme.GuiaTourTheme
 
 
-class PrivatePlace : ComponentActivity() {
+class PrivatePlaceActivity : ComponentActivity() {
 
     companion object {
         private const val PARAM = "PARAM"
         fun newInstance(context: Context, param: String) =
-            Intent(context, PrivatePlace::class.java).apply {
+            Intent(context, PrivatePlaceActivity::class.java).apply {
                 putExtra(PARAM, param)
             }
     }
