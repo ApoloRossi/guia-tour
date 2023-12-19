@@ -9,12 +9,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.guiatour.data.PlacesRepository
 import com.guiatour.data.PlacesRepositoryImpl
+import com.guiatour.data.PlacesResponse
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel() {
 
-    private val placesMutableLiveData : MutableLiveData<List<List<String>>> = MutableLiveData()
-    val placesLiveData : LiveData<List<List<String>>> = placesMutableLiveData
+    private val placesMutableLiveData : MutableLiveData<PlacesResponse> = MutableLiveData()
+    val placesLiveData : LiveData<PlacesResponse> = placesMutableLiveData
 
     companion object {
 
@@ -33,7 +34,7 @@ class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel(
 
     fun fetchPlaces() {
         viewModelScope.launch {
-            val places = placesRepository.fetchPlaces()
+            val places = placesRepository.fetchPlacesByCategory("")
             placesMutableLiveData.postValue(places)
         }
     }

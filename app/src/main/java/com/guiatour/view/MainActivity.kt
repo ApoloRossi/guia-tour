@@ -22,11 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.guiatour.viewModel.HomeViewModel
 import com.guiatour.R
+import com.guiatour.data.PlacesResponse
 import com.guiatour.ui.theme.GuiaTourTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var allPlaces: List<List<String>> by mutableStateOf(emptyList())
+    private var allPlaces: PlacesResponse by mutableStateOf(PlacesResponse(emptyList()))
 
     private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
 
@@ -47,8 +48,8 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    @Preview(showBackground = true)
     @Composable
-    @Preview
     private fun MainContent() {
         val onActionClick: () -> Unit = {}
 
@@ -62,7 +63,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 SearchInputField()
 
-                if (allPlaces.isEmpty()) {
+                if (allPlaces.places.isEmpty()) {
                     LoaderComponent()
                 } else {
                     CategoriesList(allPlaces)
@@ -83,21 +84,21 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun CategoriesList(lists: List<List<String>>) {
+    fun CategoriesList(list: PlacesResponse) {
         LazyColumn {
-            items(lists.size) { index ->
-                CategorySection(lists, index)
+            items(list.places.size) { index ->
+                CategorySection(list, index)
             }
         }
     }
 
     @Composable
     private fun CategorySection(
-        categories: List<List<String>>,
+        categories: PlacesResponse,
         index: Int
     ) {
         Text(
-            text = "Parques",
+            text = categories.places[index].category,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.onPrimary,
@@ -108,8 +109,8 @@ class MainActivity : ComponentActivity() {
                 .padding(8.dp)
                 .fillMaxWidth()
         ) {
-            items(categories[index].size) { place ->
-                PlacesListForCategory(categories[index][place])
+            items(categories.places[index].placesByCategory.size) { place ->
+                PlacesListForCategory(categories.places[index].placesByCategory[place].name)
             }
         }
     }
@@ -148,7 +149,7 @@ class MainActivity : ComponentActivity() {
             onValueChange = { newText ->
                 inputValue.value = newText
                 //copilot: filter the allPlaces by newText
-                allPlaces.filter { it.contains(newText) }
+                //allPlaces.filter { it.contains(newText) }
             },
             textStyle = TextStyle(color = MaterialTheme.colors.onPrimary),
             placeholder = { Text(text = "Faça a sua busca") },
@@ -162,8 +163,8 @@ class MainActivity : ComponentActivity() {
     private fun showDetail() {
 
         //startActivity PrivatePlace
-        startActivity(PrivatePlaceActivity.newInstance(this, "Ibirapuera"))
-        //startActivity(PlaceDetail.newInstance(this, "Ibirapuera"))
+        //startActivity(PrivatePlaceActivity.newInstance(this, "Ibirapuera"))
+        startActivity(PlaceDetailActivity.newInstance(this, "Ibirapuera"))
     }
 
 }
