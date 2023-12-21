@@ -1,5 +1,5 @@
 package com.guiatour.data
 
 interface PlacesRepository {
-    suspend fun fetchPlacesByCategory(category: String): PlacesResponse
+    suspend fun fetchPlacesByCategory(category: String): Places
 }

@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.guiatour.viewModel.HomeViewModel
 import com.guiatour.R
-import com.guiatour.data.PlacesResponse
+import com.guiatour.data.Places
 import com.guiatour.ui.theme.GuiaTourTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var allPlaces: PlacesResponse by mutableStateOf(PlacesResponse(emptyList()))
+    private var allPlaces: MutableList<Places> = mutableStateListOf()
 
     private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
 
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
         }
 
         viewModel.placesLiveData.observe(this) {
-            allPlaces = it
+            allPlaces.add(it)
         }
 
         viewModel.fetchPlaces()
@@ -63,12 +63,11 @@ class MainActivity : ComponentActivity() {
             ) {
                 SearchInputField()
 
-                if (allPlaces.places.isEmpty()) {
+                if (allPlaces.isEmpty()) {
                     LoaderComponent()
                 } else {
-                    CategoriesList(allPlaces)
+                    CategoriesList(allPlaces.last())
                 }
-
             }
         }
     }
@@ -84,21 +83,20 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun CategoriesList(list: PlacesResponse) {
+    fun CategoriesList(places: Places) {
         LazyColumn {
-            items(list.places.size) { index ->
-                CategorySection(list, index)
+            items(1) { index ->
+                CategorySection(places)
             }
         }
     }
 
     @Composable
     private fun CategorySection(
-        categories: PlacesResponse,
-        index: Int
+        categories: Places
     ) {
         Text(
-            text = categories.places[index].category,
+            text = categories.category,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.onPrimary,
@@ -109,8 +107,8 @@ class MainActivity : ComponentActivity() {
                 .padding(8.dp)
                 .fillMaxWidth()
         ) {
-            items(categories.places[index].placesByCategory.size) { place ->
-                PlacesListForCategory(categories.places[index].placesByCategory[place].name)
+            items(categories.placesByCategory.size) { place ->
+                PlacesListForCategory(categories.placesByCategory[place].name)
             }
         }
     }

@@ -5,28 +5,103 @@ import kotlinx.coroutines.delay
 
 class PlacesRepositoryImpl : PlacesRepository {
 
-   private val response = "{" +
-           "\"places\": [\n" +
+   private val responseParks = //"{" +
+           //"\"places\": [\n" +
            "{" +
                "\"category\": \"Parques\"," +
-               "\"places_by_category\": [{" +
-               "\"name\": \"Jaraguá\"," +
-               "\"description\": \"Jaraguá\"," +
-               "\"image\": \"Jaraguá\"}]" +
-           "}," +
-           "{" +
-               "\"category\": \"Bares\"," +
-               "\"places_by_category\": [{" +
-               "\"name\": \"Jaraguá\"," +
-               "\"description\": \"Jaraguá\"," +
-               "\"image\": \"Jaraguá\"}]" +
-           "}" +
-           "]" +
+               "\"places_by_category\": " +
+                    "[{" +
+                       "\"name\": \"Jaraguá\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Ibirapuera\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Vila Lobos\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Taquaral\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}" +
+                "]" +
            "}"
 
-    override suspend fun fetchPlacesByCategory(category: String): PlacesResponse {
-        delay(2000)
-        val placesResponse = Gson().fromJson(response, PlacesResponse::class.java)
+
+    private val responsePubs = //"{" +
+           //"\"places\": [\n" +
+           "{" +
+               "\"category\": \"Bares\"," +
+               "\"places_by_category\": " +
+                    "[{" +
+                       "\"name\": \"Jaraguá\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Ibirapuera\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Vila Lobos\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Taquaral\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}" +
+                "]" +
+           "}"
+
+    private val responseParties = //"{" +
+           //"\"places\": [\n" +
+           "{" +
+               "\"category\": \"Baladas\"," +
+               "\"places_by_category\": " +
+                    "[{" +
+                       "\"name\": \"Jaraguá\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Ibirapuera\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Vila Lobos\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}," + "{" +
+                       "\"name\": \"Taquaral\"," +
+                       "\"description\": \"Jaraguá\"," +
+                       "\"image\": \"Jaraguá\"" +
+                    "}" +
+                "]" +
+           "}"
+
+
+
+
+    override suspend fun fetchPlacesByCategory(category: String): Places {
+        val response = when(category) {
+            "Parques" -> {
+                delay(2000)
+                responseParks
+            }
+            "Bares" -> {
+                delay(5000)
+                responsePubs
+            }
+            "Baladas" -> {
+                delay(8000)
+                responseParties
+            }
+            else -> ""
+        }
+
+        val placesResponse = Gson().fromJson(response, Places::class.java)
         return placesResponse
     }
 }
