@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -66,7 +69,7 @@ class MainActivity : ComponentActivity() {
                 if (allPlaces.isEmpty()) {
                     LoaderComponent()
                 } else {
-                    CategoriesList(allPlaces.last())
+                    CategoriesList(allPlaces)
                 }
             }
         }
@@ -82,11 +85,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun CategoriesList(places: Places) {
+    fun CategoriesList(places: List<Places>) {
         LazyColumn {
-            items(1) { index ->
-                CategorySection(places)
+            items(places, key = { it.category }) {
+                Column {
+                    CategorySection(it)
+                }
             }
         }
     }
