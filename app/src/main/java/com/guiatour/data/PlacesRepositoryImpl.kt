@@ -2,6 +2,7 @@ package com.guiatour.data
 
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 
 class PlacesRepositoryImpl : PlacesRepository {
 
@@ -84,7 +85,7 @@ class PlacesRepositoryImpl : PlacesRepository {
 
 
 
-    override suspend fun fetchPlacesByCategory(category: String): Places {
+    override suspend fun fetchPlacesByCategory(category: String) = flow {
         val response = when(category) {
             "Parques" -> {
                 delay(2000)
@@ -102,6 +103,6 @@ class PlacesRepositoryImpl : PlacesRepository {
         }
 
         val placesResponse = Gson().fromJson(response, Places::class.java)
-        return placesResponse
+        emit(placesResponse)
     }
 }

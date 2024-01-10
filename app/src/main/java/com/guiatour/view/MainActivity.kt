@@ -30,9 +30,8 @@ import com.guiatour.ui.theme.GuiaTourTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var allPlaces: MutableList<Places> = mutableStateListOf()
-
     private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
+    private val allPlaces: MutableList<Places> = mutableStateListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +43,9 @@ class MainActivity : ComponentActivity() {
         }
 
         viewModel.placesLiveData.observe(this) {
-            allPlaces.add(it)
+            allPlaces.clear()
+            allPlaces.addAll(it)
         }
-
         viewModel.fetchPlaces()
 
     }
@@ -69,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 if (allPlaces.isEmpty()) {
                     LoaderComponent()
                 } else {
-                    CategoriesList(allPlaces)
+                    CategoriesList(allPlaces.toList())
                 }
             }
         }

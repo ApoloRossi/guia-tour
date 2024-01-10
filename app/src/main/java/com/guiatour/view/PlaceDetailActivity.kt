@@ -65,7 +65,9 @@ class PlaceDetailActivity : ComponentActivity() {
                     .background(colorResource(id = R.color.default_green))
 
             ) {
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    onBackPressed()
+                }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",

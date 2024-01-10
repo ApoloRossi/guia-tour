@@ -4,30 +4,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.guiatour.data.Places
 import com.guiatour.data.PlacesRepository
 import com.guiatour.data.PlacesRepositoryImpl
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel() {
 
-    private val placesMutableLiveData: MutableLiveData<Places> = MutableLiveData()
-    val placesLiveData: LiveData<Places> = placesMutableLiveData
+    private val placesMutableLiveData: MutableLiveData<MutableList<Places>> = MutableLiveData()
+    val placesLiveData: LiveData<MutableList<Places>> = placesMutableLiveData
+
+    private var allPlaces = mutableListOf<Places>()
 
     companion object {
 
-        const val HOME_VIEW_MODEL = "HOME_VIEW_MODEL"
-
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-                val placesRepository: PlacesRepository = PlacesRepositoryImpl()
-                val savedStateHandle = extras.createSavedStateHandle()
-
-                return HomeViewModel(placesRepository) as T
-
+                return HomeViewModel(PlacesRepositoryImpl()) as T
             }
         }
     }
@@ -42,22 +38,32 @@ class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel(
 
     fun fetchParques() {
         viewModelScope.launch {
-            val places = placesRepository.fetchPlacesByCategory("Parques")
-            placesMutableLiveData.postValue(places)
+            placesRepository.fetchPlacesByCategory("Parques").onEach {
+                allPlaces.add(it)
+            }.collect {
+                placesMutableLiveData.postValue(allPlaces)
+            }
         }
     }
 
     fun fetchBares() {
         viewModelScope.launch {
-            val places = placesRepository.fetchPlacesByCategory("Bares")
-            placesMutableLiveData.postValue(places)
+            placesRepository.fetchPlacesByCategory("Bares").onEach {
+                allPlaces.add(it)
+            }.collect {
+                placesMutableLiveData.postValue(allPlaces)
+            }
+
         }
     }
 
     fun fetchBaladas() {
         viewModelScope.launch {
-            val places = placesRepository.fetchPlacesByCategory("Baladas")
-            placesMutableLiveData.postValue(places)
+            placesRepository.fetchPlacesByCategory("Baladas").onEach {
+                allPlaces.add(it)
+            }.collect {
+                placesMutableLiveData.postValue(allPlaces)
+            }
         }
     }
 
