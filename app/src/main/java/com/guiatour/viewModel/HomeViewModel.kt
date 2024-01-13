@@ -3,30 +3,23 @@ package com.guiatour.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.guiatour.data.Places
 import com.guiatour.data.PlacesRepository
-import com.guiatour.data.PlacesRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val placesRepository: PlacesRepository
+) : ViewModel() {
 
     private val placesMutableLiveData: MutableLiveData<MutableList<Places>> = MutableLiveData()
     val placesLiveData: LiveData<MutableList<Places>> = placesMutableLiveData
 
     private var allPlaces = mutableListOf<Places>()
-
-    companion object {
-
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-                return HomeViewModel(PlacesRepositoryImpl()) as T
-            }
-        }
-    }
 
     fun fetchPlaces() {
         viewModelScope.launch {
@@ -36,7 +29,7 @@ class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel(
         }
     }
 
-    fun fetchParques() {
+    private fun fetchParques() {
         viewModelScope.launch {
             placesRepository.fetchPlacesByCategory("Parques").onEach {
                 allPlaces.add(it)
@@ -46,7 +39,7 @@ class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel(
         }
     }
 
-    fun fetchBares() {
+    private fun fetchBares() {
         viewModelScope.launch {
             placesRepository.fetchPlacesByCategory("Bares").onEach {
                 allPlaces.add(it)
@@ -57,7 +50,7 @@ class HomeViewModel(private val placesRepository: PlacesRepository) : ViewModel(
         }
     }
 
-    fun fetchBaladas() {
+    private fun fetchBaladas() {
         viewModelScope.launch {
             placesRepository.fetchPlacesByCategory("Baladas").onEach {
                 allPlaces.add(it)

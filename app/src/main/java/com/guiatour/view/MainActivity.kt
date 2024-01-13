@@ -27,10 +27,13 @@ import com.guiatour.viewModel.HomeViewModel
 import com.guiatour.R
 import com.guiatour.data.Places
 import com.guiatour.ui.theme.GuiaTourTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
+    val viewModel: HomeViewModel by viewModels()
+
     private val allPlaces: MutableList<Places> = mutableStateListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +87,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun CategoriesList(places: List<Places>) {
         LazyColumn {
