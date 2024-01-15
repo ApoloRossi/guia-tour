@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guiatour.data.Places
-import com.guiatour.data.PlacesRepository
+import com.guiatour.usecase.PlacesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val placesRepository: PlacesRepository
+    private val placesUseCase: PlacesUseCase
 ) : ViewModel() {
 
     private val placesMutableLiveData: MutableLiveData<MutableList<Places>> = MutableLiveData()
@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchParques() {
         viewModelScope.launch {
-            placesRepository.fetchPlacesByCategory("Parques").onEach {
+            placesUseCase.fetchPlacesByCategory("Parques").onEach {
                 allPlaces.add(it)
             }.collect {
                 placesMutableLiveData.postValue(allPlaces)
@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchBares() {
         viewModelScope.launch {
-            placesRepository.fetchPlacesByCategory("Bares").onEach {
+            placesUseCase.fetchPlacesByCategory("Bares").onEach {
                 allPlaces.add(it)
             }.collect {
                 placesMutableLiveData.postValue(allPlaces)
@@ -52,7 +52,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchBaladas() {
         viewModelScope.launch {
-            placesRepository.fetchPlacesByCategory("Baladas").onEach {
+            placesUseCase.fetchPlacesByCategory("Baladas").onEach {
                 allPlaces.add(it)
             }.collect {
                 placesMutableLiveData.postValue(allPlaces)
