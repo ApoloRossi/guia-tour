@@ -1,6 +1,6 @@
 package com.guiatour.usecase
 
-import com.guiatour.data.PlacesRepository
+import com.guiatour.home.repository.PlacesRepository
 import javax.inject.Inject
 
 class PlacesUseCaseImpl @Inject constructor(

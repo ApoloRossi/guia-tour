@@ -1,4 +1,4 @@
-package com.guiatour.data
+package com.guiatour.home.data
 
 import com.google.gson.annotations.SerializedName
 

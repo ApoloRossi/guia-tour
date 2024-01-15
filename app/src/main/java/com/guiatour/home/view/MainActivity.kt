@@ -1,11 +1,9 @@
-package com.guiatour.view
+package com.guiatour.home.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,10 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.guiatour.viewModel.HomeViewModel
+import com.guiatour.home.viewModel.HomeViewModel
 import com.guiatour.R
-import com.guiatour.data.Places
+import com.guiatour.home.data.Places
 import com.guiatour.ui.theme.GuiaTourTheme
+import com.guiatour.view.PlaceDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

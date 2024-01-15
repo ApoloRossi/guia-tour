@@ -1,5 +1,6 @@
-package com.guiatour.data
+package com.guiatour.home.repository
 
+import com.guiatour.home.data.Places
 import kotlinx.coroutines.flow.Flow
 
 interface PlacesRepository {

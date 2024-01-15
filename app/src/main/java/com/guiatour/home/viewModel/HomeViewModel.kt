@@ -1,10 +1,10 @@
-package com.guiatour.viewModel
+package com.guiatour.home.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.guiatour.data.Places
+import com.guiatour.home.data.Places
 import com.guiatour.usecase.PlacesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach

@@ -1,6 +1,6 @@
 package com.guiatour.usecase
 
-import com.guiatour.data.Places
+import com.guiatour.home.data.Places
 import kotlinx.coroutines.flow.Flow
 
 interface PlacesUseCase {

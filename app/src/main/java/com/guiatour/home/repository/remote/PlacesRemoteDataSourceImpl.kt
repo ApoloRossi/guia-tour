@@ -1,11 +1,15 @@
-package com.guiatour.data
+package com.guiatour.home.repository.remote
 
+import com.guiatour.home.data.Places
+import com.guiatour.home.repository.service.ParksService
+import com.guiatour.home.repository.service.PartiesService
+import com.guiatour.home.repository.service.PubsService
 import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit
-import javax.inject.Inject
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class PlacesRepositoryImpl @Inject constructor() : PlacesRepository {
+class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource {
 
     companion object {
         private const val BASE_URL =

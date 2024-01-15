@@ -1,4 +1,4 @@
-package com.guiatour.data
+package com.guiatour.home.repository
 
 import dagger.Binds
 import dagger.Module
