@@ -1,109 +1,43 @@
 package com.guiatour.data
 
-import com.google.gson.Gson
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
+import retrofit2.Retrofit
 import javax.inject.Inject
+import retrofit2.converter.gson.GsonConverterFactory
 
 class PlacesRepositoryImpl @Inject constructor() : PlacesRepository {
 
-   private val responseParks = //"{" +
-           //"\"places\": [\n" +
-           "{" +
-               "\"category\": \"Parques\"," +
-               "\"places_by_category\": " +
-                    "[{" +
-                       "\"name\": \"Jaraguá\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Ibirapuera\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Vila Lobos\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Taquaral\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}" +
-                "]" +
-           "}"
+    companion object {
+        private const val BASE_URL =
+            "https://raw.githubusercontent.com/ApoloRossi/guia-tour/main/app/sampledata/"
+    }
 
-
-    private val responsePubs = //"{" +
-           //"\"places\": [\n" +
-           "{" +
-               "\"category\": \"Bares\"," +
-               "\"places_by_category\": " +
-                    "[{" +
-                       "\"name\": \"Jaraguá\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Ibirapuera\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Vila Lobos\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Taquaral\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}" +
-                "]" +
-           "}"
-
-    private val responseParties = //"{" +
-           //"\"places\": [\n" +
-           "{" +
-               "\"category\": \"Baladas\"," +
-               "\"places_by_category\": " +
-                    "[{" +
-                       "\"name\": \"Jaraguá\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Ibirapuera\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Vila Lobos\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}," + "{" +
-                       "\"name\": \"Taquaral\"," +
-                       "\"description\": \"Jaraguá\"," +
-                       "\"image\": \"Jaraguá\"" +
-                    "}" +
-                "]" +
-           "}"
-
-
-
+    private fun <T> createBuilder(clazz: Class<T>) = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(clazz)
 
     override suspend fun fetchPlacesByCategory(category: String) = flow {
-        val response = when(category) {
+
+        val places = when (category) {
             "Parques" -> {
-                delay(2000)
-                responseParks
+                createBuilder(ParksService::class.java).fetchParks() as Places
             }
+
             "Bares" -> {
-                delay(5000)
-                responsePubs
+                createBuilder(PubsService::class.java).fetchPubs() as Places
             }
+
             "Baladas" -> {
-                delay(8000)
-                responseParties
+                createBuilder(PartiesService::class.java).fetchParties() as Places
+            } else -> {
+                null
             }
-            else -> ""
         }
 
-        val placesResponse = Gson().fromJson(response, Places::class.java)
-        emit(placesResponse)
+        places?.let {
+            emit(it)
+        }
     }
 }
