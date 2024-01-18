@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlacesLocalDataSource {
     suspend fun getPlaceFromLocal(category : String): Flow<Places>? = null
+
+    suspend fun savePlacesToLocal(places: Places)
 }

@@ -26,15 +26,18 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
 
         val places = when (category) {
             "Parques" -> {
-                createBuilder(ParksService::class.java).fetchParks() as Places
+                kotlinx.coroutines.delay(2000L)
+                createBuilder(ParksService::class.java).fetchParks()
             }
 
             "Bares" -> {
-                createBuilder(PubsService::class.java).fetchPubs() as Places
+                kotlinx.coroutines.delay(1000L)
+                createBuilder(PubsService::class.java).fetchPubs()
             }
 
             "Baladas" -> {
-                createBuilder(PartiesService::class.java).fetchParties() as Places
+                kotlinx.coroutines.delay(4000L)
+                createBuilder(PartiesService::class.java).fetchParties()
             } else -> {
                 null
             }

@@ -10,7 +10,13 @@ class PlacesRepositoryImpl @Inject constructor(
 ) : PlacesRepository {
 
     override suspend fun fetchPlacesByCategory(category: String) = run {
-        local.getPlaceFromLocal(category) ?: remote.fetchPlacesByCategory(category)
+        local.getPlaceFromLocal(category) ?: fetchRemote(category)
     }
 
+    private suspend fun fetchRemote(category: String) =
+        remote.fetchPlacesByCategory(category).apply {
+            this.collect {
+                local.savePlacesToLocal(it)
+            }
+        }
 }
