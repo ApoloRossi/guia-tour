@@ -18,12 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.guiatour.home.viewModel.HomeViewModel
 import com.guiatour.R
 import com.guiatour.home.data.Places
+import com.guiatour.home.viewModel.HomeUIState
 import com.guiatour.ui.theme.GuiaTourTheme
 import com.guiatour.view.PlaceDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,8 +32,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     val viewModel: HomeViewModel by viewModels()
-
-    private val allPlaces: MutableList<Places> = mutableStateListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,18 +42,15 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        viewModel.placesLiveData.observe(this) {
-            allPlaces.clear()
-            allPlaces.addAll(it)
-        }
         viewModel.fetchPlaces()
 
     }
 
-    @Preview(showBackground = true)
+    //@Preview(showBackground = true)
     @Composable
     private fun MainContent() {
-        val onActionClick: () -> Unit = {}
+
+        val homeUIState: HomeUIState by viewModel.homeUI.collectAsState(initial = HomeUIState.Loading)
 
         Scaffold(topBar = {
             com.guiatour.TopAppBar("Guia Tour", filter = true)
@@ -67,10 +62,12 @@ class MainActivity : ComponentActivity() {
             ) {
                 SearchInputField()
 
-                if (allPlaces.isEmpty()) {
+                if (homeUIState is HomeUIState.Success) {
+                    CategoriesList((homeUIState as HomeUIState.Success).places.value)
+                } else if (homeUIState is HomeUIState.Loading) {
                     LoaderComponent()
                 } else {
-                    CategoriesList(allPlaces.toList())
+                    Text("Error")
                 }
             }
         }
