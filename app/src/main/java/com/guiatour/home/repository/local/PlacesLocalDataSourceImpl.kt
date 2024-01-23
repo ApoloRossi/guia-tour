@@ -1,18 +1,17 @@
 package com.guiatour.home.repository.local
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.guiatour.home.data.Places
-import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class PlacesLocalDataSourceImpl @Inject constructor(
@@ -26,7 +25,7 @@ class PlacesLocalDataSourceImpl @Inject constructor(
     private val Context.dataStore by preferencesDataStore(name = PLACES_DATASTORE_NAME)
 
     override suspend fun getPlaceFromLocal(category: String): Flow<Places>? {
-        context.dataStore.data.first().let {
+        context.dataStore.data.flowOn(Dispatchers.IO).first().let {
             it[stringPreferencesKey(category)]?.let { placesJson ->
                 return flow {
                     emit(Gson().fromJson(placesJson, Places::class.java))

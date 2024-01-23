@@ -6,11 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.guiatour.home.data.Places
 import com.guiatour.usecase.PlacesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,11 +24,9 @@ class HomeViewModel @Inject constructor(
     private var allPlaces = mutableListOf<Places>()
 
     fun fetchPlaces() {
-        viewModelScope.launch {
-            fetchParques()
-            fetchBares()
-            fetchBaladas()
-        }
+        fetchParques()
+        fetchBares()
+        fetchBaladas()
     }
 
     private fun fetchParques() {
@@ -51,7 +47,7 @@ class HomeViewModel @Inject constructor(
                 allPlaces.add(it)
             }.catch {
                 homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
-            }.flowOn(Dispatchers.IO).collect {
+            }.collect {
                 homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
             }
         }

@@ -3,8 +3,10 @@ package com.guiatour.home.repository.remote
 import com.guiatour.home.repository.service.ParksService
 import com.guiatour.home.repository.service.PartiesService
 import com.guiatour.home.repository.service.PubsService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -48,5 +50,5 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
         }
     }.catch {
         throw it
-    }
+    }.flowOn(Dispatchers.IO)
 }
