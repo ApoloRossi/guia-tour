@@ -2,6 +2,7 @@ package com.guiatour.home.repository
 
 import com.guiatour.home.repository.local.PlacesLocalDataSource
 import com.guiatour.home.repository.remote.PlacesRemoteDataSource
+import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
 class PlacesRepositoryImpl @Inject constructor(
@@ -10,12 +11,14 @@ class PlacesRepositoryImpl @Inject constructor(
 ) : PlacesRepository {
 
     override suspend fun fetchPlacesByCategory(category: String) = run {
-        local.getPlaceFromLocal(category) ?: fetchRemote(category)
+        local.getPlaceFromLocal(category) ?: fetchRemote(category).catch {
+            throw it
+        }
     }
 
     private suspend fun fetchRemote(category: String) =
         remote.fetchPlacesByCategory(category).apply {
-            this.collect {
+            catch {}.collect {
                 local.savePlacesToLocal(it)
             }
         }

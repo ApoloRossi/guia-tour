@@ -1,9 +1,9 @@
 package com.guiatour.home.repository.remote
 
-import com.guiatour.home.data.Places
 import com.guiatour.home.repository.service.ParksService
 import com.guiatour.home.repository.service.PartiesService
 import com.guiatour.home.repository.service.PubsService
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -46,5 +46,7 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
         places?.let {
             emit(it)
         }
+    }.catch {
+        throw it
     }
 }

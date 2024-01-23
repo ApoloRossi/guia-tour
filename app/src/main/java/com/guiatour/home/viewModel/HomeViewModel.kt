@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.guiatour.home.data.Places
 import com.guiatour.usecase.PlacesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,13 +21,12 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var homeUIMutable: MutableSharedFlow<HomeUIState> = MutableSharedFlow()
-    var homeUI: Flow<HomeUIState> = homeUIMutable
+    var homeUI: SharedFlow<HomeUIState> = homeUIMutable
 
     private var allPlaces = mutableListOf<Places>()
 
     fun fetchPlaces() {
         viewModelScope.launch {
-            homeUIMutable.emit(HomeUIState.Loading)
             fetchParques()
             fetchBares()
             fetchBaladas()
@@ -36,10 +37,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             placesUseCase.fetchPlacesByCategory("Parques").onEach {
                 allPlaces.add(it)
-            }.map {
+            }.catch {
+                homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
+            }.collect {
                 homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
-            }.collect{
-
             }
         }
     }
@@ -48,10 +49,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             placesUseCase.fetchPlacesByCategory("Bares").onEach {
                 allPlaces.add(it)
-            }.map {
+            }.catch {
+                homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
+            }.flowOn(Dispatchers.IO).collect {
                 homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
-            }.collect {
-
             }
         }
     }
@@ -60,12 +61,11 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             placesUseCase.fetchPlacesByCategory("Baladas").onEach {
                 allPlaces.add(it)
-            }.map {
+            }.catch {
+                homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
+            }.collect {
                 homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
-            }.collect{
-
             }
         }
     }
-
 }

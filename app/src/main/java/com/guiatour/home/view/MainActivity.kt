@@ -66,8 +66,14 @@ class MainActivity : ComponentActivity() {
                     CategoriesList((homeUIState as HomeUIState.Success).places.value)
                 } else if (homeUIState is HomeUIState.Loading) {
                     LoaderComponent()
-                } else {
-                    Text("Error")
+                } else if (homeUIState is HomeUIState.Error) {
+                    Text(
+                        text = (homeUIState as HomeUIState.Error).errorMessage,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(8.dp),
+                    )
                 }
             }
         }
