@@ -25,7 +25,7 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
         .create(clazz)
 
     override suspend fun fetchPlacesByCategory(category: String) = flow {
-
+        println("Start request remote: $category")
         val places = when (category) {
             "Parques" -> {
                 kotlinx.coroutines.delay(2000L)

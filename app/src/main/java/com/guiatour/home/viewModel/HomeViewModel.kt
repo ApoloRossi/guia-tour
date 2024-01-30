@@ -24,8 +24,8 @@ class HomeViewModel @Inject constructor(
     private var allPlaces = mutableListOf<Places>()
 
     fun fetchPlaces() {
-        fetchParques()
         fetchBares()
+        fetchParques()
         fetchBaladas()
     }
 
