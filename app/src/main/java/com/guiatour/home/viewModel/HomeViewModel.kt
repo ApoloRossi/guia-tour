@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guiatour.home.data.Places
-import com.guiatour.usecase.PlacesUseCase
+import com.guiatour.home.usecase.PlacesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchParques() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Parques").onEach {
+            placesUseCase.fetchPlacesByCategory("Parques", this).onEach {
                 allPlaces.add(it)
             }.catch {
                 homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
@@ -43,19 +43,20 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchBares() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Bares").onEach {
-                allPlaces.add(it)
-            }.catch {
-                homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
-            }.collect {
-                homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
-            }
+            placesUseCase.fetchPlacesByCategory("Bares", this)
+                .onEach {
+                    allPlaces.add(it)
+                }.catch {
+                    homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
+                }.collect {
+                    homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
+                }
         }
     }
 
     private fun fetchBaladas() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Baladas").onEach {
+            placesUseCase.fetchPlacesByCategory("Baladas", this).onEach {
                 allPlaces.add(it)
             }.catch {
                 homeUIMutable.emit(HomeUIState.Error(it.message.toString()))

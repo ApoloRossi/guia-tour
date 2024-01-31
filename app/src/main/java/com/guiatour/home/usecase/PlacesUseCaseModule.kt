@@ -1,6 +1,5 @@
 package com.guiatour.home.usecase
 
-import com.guiatour.usecase.PlacesUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
