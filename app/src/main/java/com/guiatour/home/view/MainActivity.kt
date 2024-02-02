@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
         }
 
         viewModel.fetchPlaces()
-
     }
 
     //@Preview(showBackground = true)

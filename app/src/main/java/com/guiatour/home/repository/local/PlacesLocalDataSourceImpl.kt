@@ -7,11 +7,14 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.guiatour.home.data.Places
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
 class PlacesLocalDataSourceImpl @Inject constructor(
@@ -24,12 +27,16 @@ class PlacesLocalDataSourceImpl @Inject constructor(
 
     private val Context.dataStore by preferencesDataStore(name = PLACES_DATASTORE_NAME)
 
-    override suspend fun getPlaceFromLocal(category: String): Flow<Places>? {
+    override suspend fun getPlaceFromLocal(
+        category: String,
+        coroutineScope: CoroutineScope
+    ): SharedFlow<Places>? {
         context.dataStore.data.flowOn(Dispatchers.IO).first().let {
             it[stringPreferencesKey(category)]?.let { placesJson ->
                 return flow {
+                    println("Start request from local: $category")
                     emit(Gson().fromJson(placesJson, Places::class.java))
-                }
+                }.shareIn(scope = coroutineScope, started = SharingStarted.Lazily)
             }
         }
         return null

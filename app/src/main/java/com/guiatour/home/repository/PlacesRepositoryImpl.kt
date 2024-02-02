@@ -15,8 +15,7 @@ class PlacesRepositoryImpl @Inject constructor(
 
     override suspend fun fetchPlacesByCategory(category: String, coroutineScope: CoroutineScope) =
         run {
-            //local.getPlaceFromLocal(category) ?:
-            fetchRemote(category, coroutineScope)
+            local.getPlaceFromLocal(category, coroutineScope) ?: fetchRemote(category, coroutineScope)
         }
 
     private suspend fun fetchRemote(category: String, coroutineScope: CoroutineScope) =
