@@ -7,5 +7,6 @@ sealed interface HomeUIState {
     data class Success(val places: MutableState<List<Places>>) : HomeUIState
     data class Error(val errorMessage : String) : HomeUIState
     object WifiError : HomeUIState
+    object Empty : HomeUIState
     object Loading : HomeUIState
 }

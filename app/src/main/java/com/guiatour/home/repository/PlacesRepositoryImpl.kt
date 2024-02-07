@@ -3,9 +3,7 @@ package com.guiatour.home.repository
 import com.guiatour.home.repository.local.PlacesLocalDataSource
 import com.guiatour.home.repository.remote.PlacesRemoteDataSource
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PlacesRepositoryImpl @Inject constructor(
@@ -19,13 +17,10 @@ class PlacesRepositoryImpl @Inject constructor(
         }
 
     private suspend fun fetchRemote(category: String, coroutineScope: CoroutineScope) =
-        remote.fetchPlacesByCategory(category).shareIn(coroutineScope, SharingStarted.Eagerly)
-            .apply {
-                coroutineScope.launch {
-                    collect {
-                        println("Request collected, save local $it")
-                        local.savePlacesToLocal(it)
-                    }
+        remote.fetchPlacesByCategory(category).map {
+                    println("Request collected, save local $it")
+                    local.savePlacesToLocal(it)
+                    it
                 }
-            }
+
 }

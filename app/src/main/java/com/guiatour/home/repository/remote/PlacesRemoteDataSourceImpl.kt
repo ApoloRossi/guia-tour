@@ -30,16 +30,22 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
             "Parques" -> {
                 kotlinx.coroutines.delay(2000L)
                 createBuilder(ParksService::class.java).fetchParks()
+                //Places("Parques", emptyList())
+                //throw Exception("Error")
             }
 
             "Bares" -> {
                 kotlinx.coroutines.delay(1000L)
                 createBuilder(PubsService::class.java).fetchPubs()
+                //Places("Bares", emptyList())
+                //throw Exception("Error")
             }
 
             "Baladas" -> {
                 kotlinx.coroutines.delay(4000L)
                 createBuilder(PartiesService::class.java).fetchParties()
+                //Places("Baladas", emptyList())
+                //throw Exception("Error")
             } else -> {
                 null
             }

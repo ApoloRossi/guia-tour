@@ -21,8 +21,6 @@ class HomeViewModel @Inject constructor(
     private var homeUIMutable: MutableSharedFlow<HomeUIState> = MutableSharedFlow()
     var homeUI: SharedFlow<HomeUIState> = homeUIMutable
 
-    private var allPlaces = mutableListOf<Places>()
-
     fun fetchPlaces() {
         fetchBares()
         fetchParques()
@@ -31,37 +29,24 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchParques() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Parques", this).onEach {
-                allPlaces.add(it)
-            }.catch {
-                homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
-            }.collect {
-                homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
+            placesUseCase.fetchPlacesByCategory("Parques", this).collect {
+                homeUIMutable.emit(it)
             }
         }
     }
 
     private fun fetchBares() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Bares", this)
-                .onEach {
-                    allPlaces.add(it)
-                }.catch {
-                    homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
-                }.collect {
-                    homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
-                }
+            placesUseCase.fetchPlacesByCategory("Bares", this).collect {
+                homeUIMutable.emit(it)
+            }
         }
     }
 
     private fun fetchBaladas() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Baladas", this).onEach {
-                allPlaces.add(it)
-            }.catch {
-                homeUIMutable.emit(HomeUIState.Error(it.message.toString()))
-            }.collect {
-                homeUIMutable.emit(HomeUIState.Success(mutableStateOf(allPlaces)))
+            placesUseCase.fetchPlacesByCategory("Baladas", this).collect {
+                homeUIMutable.emit(it)
             }
         }
     }
