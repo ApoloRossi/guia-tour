@@ -11,15 +11,17 @@ class PlacesRepositoryImpl @Inject constructor(
     private val local: PlacesLocalDataSource
 ) : PlacesRepository {
 
-    override suspend fun fetchPlacesByCategory(category: String, coroutineScope: CoroutineScope) =
+    override suspend fun fetchPlacesByCategory(category: String) =
         run {
-            local.getPlaceFromLocal(category, coroutineScope) ?: fetchRemote(category, coroutineScope)
+            local.getPlaceFromLocal(category) ?: fetchRemote(category)
         }
 
-    private suspend fun fetchRemote(category: String, coroutineScope: CoroutineScope) =
+    private suspend fun fetchRemote(category: String) =
         remote.fetchPlacesByCategory(category).map {
                     println("Request collected, save local $it")
-                    local.savePlacesToLocal(it)
+                    if ( it.placesByCategory.isNotEmpty() ) {
+                        local.savePlacesToLocal(it)
+                    }
                     it
                 }
 

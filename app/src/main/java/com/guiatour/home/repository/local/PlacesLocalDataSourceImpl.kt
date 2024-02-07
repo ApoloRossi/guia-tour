@@ -26,8 +26,7 @@ class PlacesLocalDataSourceImpl @Inject constructor(
     private val Context.dataStore by preferencesDataStore(name = PLACES_DATASTORE_NAME)
 
     override suspend fun getPlaceFromLocal(
-        category: String,
-        coroutineScope: CoroutineScope
+        category: String
     ): Flow<Places>? {
         context.dataStore.data.flowOn(Dispatchers.IO).first().let {
             it[stringPreferencesKey(category)]?.let { placesJson ->

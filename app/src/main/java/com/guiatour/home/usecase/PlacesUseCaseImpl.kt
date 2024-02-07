@@ -16,9 +16,9 @@ class PlacesUseCaseImpl @Inject constructor(
 
     private var allPlaces = mutableListOf<Places>()
 
-    override suspend fun fetchPlacesByCategory(category: String, coroutineScope: CoroutineScope) =
+    override suspend fun fetchPlacesByCategory(category: String) =
         run {
-            placesRepository.fetchPlacesByCategory(category, coroutineScope).onEach {
+            placesRepository.fetchPlacesByCategory(category).onEach {
                 if (it.placesByCategory.isNotEmpty()) {
                     allPlaces.add(it)
                 }

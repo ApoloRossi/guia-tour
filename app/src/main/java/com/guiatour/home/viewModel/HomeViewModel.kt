@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchParques() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Parques", this).collect {
+            placesUseCase.fetchPlacesByCategory("Parques").collect {
                 homeUIMutable.emit(it)
             }
         }
@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchBares() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Bares", this).collect {
+            placesUseCase.fetchPlacesByCategory("Bares").collect {
                 homeUIMutable.emit(it)
             }
         }
@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchBaladas() {
         viewModelScope.launch {
-            placesUseCase.fetchPlacesByCategory("Baladas", this).collect {
+            placesUseCase.fetchPlacesByCategory("Baladas").collect {
                 homeUIMutable.emit(it)
             }
         }

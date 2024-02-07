@@ -5,5 +5,5 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface PlacesRepository {
-    suspend fun fetchPlacesByCategory(category: String, coroutineScope : CoroutineScope): Flow<Places>
+    suspend fun fetchPlacesByCategory(category: String): Flow<Places>
 }
