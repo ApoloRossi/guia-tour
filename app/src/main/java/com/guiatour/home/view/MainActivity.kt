@@ -20,6 +20,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.guiatour.home.viewModel.HomeViewModel
 import com.guiatour.R
 import com.guiatour.home.data.Places
@@ -27,11 +30,12 @@ import com.guiatour.home.viewModel.HomeUIState
 import com.guiatour.ui.theme.GuiaTourTheme
 import com.guiatour.view.PlaceDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +46,11 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        viewModel.fetchPlaces()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.fetchPlaces()
+            }
+        }
     }
 
     //@Preview(showBackground = true)
