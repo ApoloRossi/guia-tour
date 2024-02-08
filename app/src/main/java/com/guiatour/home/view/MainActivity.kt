@@ -70,31 +70,47 @@ class MainActivity : ComponentActivity() {
             ) {
                 SearchInputField()
 
-                if (homeUIState is HomeUIState.Success) {
-                    CategoriesList((homeUIState as HomeUIState.Success).places.value)
-                } else if (homeUIState is HomeUIState.Loading) {
-                    LoaderComponent()
-                } else if (homeUIState is HomeUIState.Empty) {
-                    Text(
-                        text = "VAZIO",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.onPrimary,
-                        modifier = Modifier.padding(8.dp),
-                    )
-                } else if (homeUIState is HomeUIState.Error) {
-                    Text(
-                        text = (homeUIState as HomeUIState.Error).errorMessage,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.onPrimary,
-                        modifier = Modifier.padding(8.dp),
-                    )
-                } else if (homeUIState is HomeUIState.InternetError) {
-                    InternetErrorComponent()
+                when(homeUIState) {
+                    is HomeUIState.Success -> {
+                        CategoriesList((homeUIState as HomeUIState.Success).places.value)
+                    }
+                    is HomeUIState.Loading -> {
+                        LoaderComponent()
+                    }
+                    is HomeUIState.Empty -> {
+                        EmptyComponent()
+                    }
+                    is HomeUIState.Error -> {
+                        ErrorComponent(homeUIState)
+                    }
+                    is HomeUIState.InternetError -> {
+                        InternetErrorComponent()
+                    }
                 }
             }
         }
+    }
+
+    @Composable
+    private fun EmptyComponent() {
+        Text(
+            text = "VAZIO",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.onPrimary,
+            modifier = Modifier.padding(8.dp),
+        )
+    }
+
+    @Composable
+    private fun ErrorComponent(homeUIState: HomeUIState) {
+        Text(
+            text = (homeUIState as HomeUIState.Error).errorMessage,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.onPrimary,
+            modifier = Modifier.padding(8.dp),
+        )
     }
 
     @Composable
