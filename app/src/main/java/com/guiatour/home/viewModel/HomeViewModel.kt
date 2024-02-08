@@ -1,30 +1,50 @@
 package com.guiatour.home.viewModel
 
-import androidx.compose.runtime.mutableStateOf
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.guiatour.home.data.Places
 import com.guiatour.home.usecase.PlacesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val placesUseCase: PlacesUseCase
+    private val placesUseCase: PlacesUseCase,
+    private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
 
-    private var homeUIMutable: MutableSharedFlow<HomeUIState> = MutableSharedFlow()
+    private var homeUIMutable: MutableSharedFlow<HomeUIState> = MutableSharedFlow(1)
     var homeUI: SharedFlow<HomeUIState> = homeUIMutable
 
     fun fetchPlaces() {
-        fetchBares()
-        fetchParques()
-        fetchBaladas()
+        if (hasInternetConnection()) {
+            fetchBares()
+            fetchParques()
+            fetchBaladas()
+        }
+    }
+
+    private fun hasInternetConnection(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+
+            val hasCapability =
+                networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    ?: false
+
+            if (!hasCapability) {
+                homeUIMutable.tryEmit(HomeUIState.InternetError)
+            }
+
+            return hasCapability
+        }
+        return true
     }
 
     private fun fetchParques() {

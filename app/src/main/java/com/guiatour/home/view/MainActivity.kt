@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -89,7 +90,47 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(8.dp),
                     )
+                } else if (homeUIState is HomeUIState.InternetError) {
+                    InternetErrorComponent()
                 }
+            }
+        }
+    }
+
+    @Composable
+    fun InternetErrorComponent() {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .wrapContentSize(align = Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_no_internet),
+                contentDescription = "No internet",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize(align = Alignment.Center)
+            )
+
+            Text(
+                text = "Sem conexão com a internet",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onPrimary,
+                style = TextStyle(textAlign = TextAlign.Center),
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Button(
+                onClick = {
+                    viewModel.fetchPlaces()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "Tentar novamente")
             }
         }
     }
