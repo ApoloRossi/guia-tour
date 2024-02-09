@@ -1,10 +1,10 @@
 package com.guiatour.home.usecase
 
 import androidx.compose.runtime.mutableStateOf
+import com.guiatour.R
 import com.guiatour.home.data.Places
 import com.guiatour.home.repository.PlacesRepository
 import com.guiatour.home.viewModel.HomeUIState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -29,7 +29,7 @@ class PlacesUseCaseImpl @Inject constructor(
                     HomeUIState.Success(mutableStateOf(allPlaces))
                 }
             }.catch {
-                emit(HomeUIState.Error(it.message.toString()))
+                emit(HomeUIState.Error(R.string.generic_error_message))
             }
         }
 }

@@ -23,6 +23,7 @@ class HomeViewModel @Inject constructor(
 
     fun fetchPlaces() {
         if (hasInternetConnection()) {
+            homeUIMutable.tryEmit(HomeUIState.Loading)
             fetchBares()
             fetchParques()
             fetchBaladas()

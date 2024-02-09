@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GuiaTour</string>
+    <string name="generic_error_message">Não foi possível buscar</string>
 </resources>

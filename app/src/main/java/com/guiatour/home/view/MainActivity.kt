@@ -15,6 +15,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,11 +25,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.guiatour.home.viewModel.HomeViewModel
 import com.guiatour.R
 import com.guiatour.home.data.Places
 import com.guiatour.home.viewModel.HomeUIState
 import com.guiatour.ui.theme.GuiaTourTheme
+import com.guiatour.ui.theme.Purple700
 import com.guiatour.view.PlaceDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -104,12 +111,57 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun ErrorComponent(homeUIState: HomeUIState) {
-        Text(
-            text = (homeUIState as HomeUIState.Error).errorMessage,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.onPrimary,
-            modifier = Modifier.padding(8.dp),
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(align = Alignment.Center),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+
+        ) {
+
+            AnimationPreLoader(
+                Modifier
+                    .size(200.dp)
+                    .align(
+                        Alignment.CenterHorizontally
+                    ))
+
+            Text(
+                text = getString((homeUIState as HomeUIState.Error).errorMessage),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+
+            Button(onClick = { viewModel.fetchPlaces() },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Purple700),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.CenterHorizontally)) {
+                Text(text = "Tentar novamente", color = Color.White)
+            }
+        }
+
+    }
+
+    @Composable
+    private fun AnimationPreLoader(modifier: Modifier) {
+        val preloaderLottieComposition by rememberLottieComposition(
+            LottieCompositionSpec.RawRes(R.raw.error_ani)
+        )
+
+        val preloaderLottieProgress by animateLottieCompositionAsState(
+            preloaderLottieComposition,
+            iterations =  LottieConstants.IterateForever,
+            isPlaying = true
+        )
+
+        LottieAnimation(
+            composition = preloaderLottieComposition,
+            progress = preloaderLottieProgress,
+            modifier = modifier
         )
     }
 

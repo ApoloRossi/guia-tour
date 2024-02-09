@@ -2,7 +2,7 @@ package com.guiatour.home.repository
 
 import com.guiatour.home.repository.local.PlacesLocalDataSource
 import com.guiatour.home.repository.remote.PlacesRemoteDataSource
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -13,6 +13,7 @@ class PlacesRepositoryImpl @Inject constructor(
 
     override suspend fun fetchPlacesByCategory(category: String) =
         run {
+            delay(2000)
             local.getPlaceFromLocal(category) ?: fetchRemote(category)
         }
 
