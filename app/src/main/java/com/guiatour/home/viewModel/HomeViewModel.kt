@@ -27,6 +27,17 @@ class HomeViewModel @Inject constructor(
             fetchBares()
             fetchParques()
             fetchBaladas()
+            fetchMock()
+        }
+    }
+
+    private fun fetchMock() {
+        viewModelScope.launch {
+            repeat(8) {
+                placesUseCase.fetchPlacesByCategory("Mock$it").collect {
+                    homeUIMutable.emit(it)
+                }
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.guiatour.home.repository.remote
 
+import com.guiatour.home.data.Place
+import com.guiatour.home.data.Places
 import com.guiatour.home.repository.service.ParksService
 import com.guiatour.home.repository.service.PartiesService
 import com.guiatour.home.repository.service.PubsService
@@ -47,7 +49,14 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
                 //Places("Baladas", emptyList())
                 //throw Exception("Error")
             } else -> {
-                null
+                Places(category,
+                    listOf(
+                        Place(name = "Mock1", description = "Mock", image = "Mock"),
+                        Place(name = "Mock2", description = "Mock", image = "Mock"),
+                        Place(name = "Mock3", description = "Mock", image = "Mock"),
+                        Place(name = "Mock4", description = "Mock", image = "Mock")
+                    )
+                )
             }
         }
 

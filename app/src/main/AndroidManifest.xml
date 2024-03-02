@@ -38,7 +38,13 @@
             android:name=".home.view.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.GuiaTour">
+            android:theme="@style/Theme.GuiaTour"/>
+
+        <activity
+            android:name=".home.view.parallax.ParallaxActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
 

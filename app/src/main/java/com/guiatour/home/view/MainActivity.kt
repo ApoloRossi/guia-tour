@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -49,28 +50,42 @@ class MainActivity : ComponentActivity() {
         Scaffold(topBar = {
             com.guiatour.TopAppBar("Guia Tour", filter = true)
         }) {
-            Column(
+            LazyColumn(
                 Modifier
                     .fillMaxWidth()
                     .padding(it)
             ) {
-                SearchInputField()
+                item {
+                    SearchInputField()
+                }
 
-                when(homeUIState) {
+                when (homeUIState) {
                     is HomeUIState.Success -> {
-                        CategoriesList((homeUIState as HomeUIState.Success).places.value)
+                        categoriesList((homeUIState as HomeUIState.Success).places.value)
                     }
+
                     is HomeUIState.Loading -> {
-                        LoaderComponent()
+                        item {
+                            LoaderComponent()
+                        }
                     }
+
                     is HomeUIState.Empty -> {
-                        EmptyComponent()
+                        item {
+                            EmptyComponent()
+                        }
                     }
+
                     is HomeUIState.Error -> {
-                        ErrorComponent(homeUIState, ::fetchPlaces)
+                        item {
+                            ErrorComponent(homeUIState, ::fetchPlaces)
+                        }
                     }
+
                     is HomeUIState.InternetError -> {
-                        InternetErrorComponent(::fetchPlaces)
+                        item {
+                            InternetErrorComponent(::fetchPlaces)
+                        }
                     }
                 }
             }
