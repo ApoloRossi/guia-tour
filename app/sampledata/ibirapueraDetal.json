@@ -1,0 +1,24 @@
+{
+  "category": "Mais vistos",
+  "groups_by_category": [
+    {
+      "name": "Baladas",
+      "image": "Jaraguá"
+    },
+    {
+      "name": "Bares",
+      "description": "Jaraguá",
+      "image": "Jaraguá"
+    },
+    {
+      "name": "Museus",
+      "description": "Jaraguá",
+      "image": "Jaraguá"
+    },
+    {
+      "name": "Parques",
+      "description": "Jaraguá",
+      "image": "Jaraguá"
+    }
+  ]
+}
