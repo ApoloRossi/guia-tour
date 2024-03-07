@@ -7,14 +7,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.guiatour.home.data.Place
 import com.guiatour.home.data.Places
 
 @Composable
 fun CategorySection(
-    categories: Places
+    categories: Places,
+    onItemClicked: (Place) -> Unit
 ) {
     Text(
         text = categories.category,
@@ -28,7 +28,9 @@ fun CategorySection(
             .fillMaxWidth()
     ) {
         items(categories.placesByCategory.size) { place ->
-            PlacesListForCategory(categories.placesByCategory[place].name)
+            PlacesListForCategory(categories.placesByCategory[place].name) {
+                onItemClicked(categories.placesByCategory[place])
+            }
         }
     }
 }

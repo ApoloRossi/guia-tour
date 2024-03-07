@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.guiatour.home.data.Place
 import com.guiatour.home.viewModel.HomeViewModel
 import com.guiatour.home.viewModel.HomeUIState
 import com.guiatour.ui.theme.GuiaTourTheme
@@ -63,7 +64,9 @@ class MainActivity : ComponentActivity() {
 
                 when (homeUIState) {
                     is HomeUIState.Success -> {
-                        categoriesList((homeUIState as HomeUIState.Success).places.value)
+                        categoriesList((homeUIState as HomeUIState.Success).places.value) { place ->
+                            showDetail(place)
+                        }
                     }
 
                     is HomeUIState.Loading -> {
@@ -97,10 +100,10 @@ class MainActivity : ComponentActivity() {
 
     private fun fetchPlaces() = viewModel.fetchPlaces()
 
-    private fun showDetail() {
+    private fun showDetail(place: Place) {
         //startActivity PrivatePlace
         //startActivity(PrivatePlaceActivity.newInstance(this, "Ibirapuera"))
-        startActivity(PlaceDetailActivity.newInstance(this, "Ibirapuera"))
+        startActivity(PlaceDetailActivity.newInstance(this, place.name))
     }
 
 }
