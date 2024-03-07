@@ -47,9 +47,11 @@ class MainActivity : ComponentActivity() {
 
         val homeUIState: HomeUIState by viewModel.homeUI.collectAsState(initial = HomeUIState.Loading)
 
+        val snackBarHostState = remember { SnackbarHostState() }
+
         Scaffold(topBar = {
             com.guiatour.TopAppBar("Guia Tour", filter = true)
-        }) {
+        }, snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) {
             LazyColumn(
                 Modifier
                     .fillMaxWidth()
@@ -79,6 +81,7 @@ class MainActivity : ComponentActivity() {
                     is HomeUIState.Error -> {
                         item {
                             ErrorComponent(homeUIState, ::fetchPlaces)
+                            SnackBarComponent(snackBarHostState, ::fetchPlaces)
                         }
                     }
 

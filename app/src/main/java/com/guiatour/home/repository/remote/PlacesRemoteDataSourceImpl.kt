@@ -60,7 +60,7 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
             }
         }
 
-        places?.let {
+        places.let {
             emit(it)
         }
     }.catch {
