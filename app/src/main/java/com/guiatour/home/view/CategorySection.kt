@@ -18,8 +18,7 @@ fun CategorySection(
 ) {
     Text(
         text = categories.category,
-        fontSize = 24.sp,
-        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.h5,
         color = MaterialTheme.colors.onPrimary,
         modifier = Modifier.padding(8.dp),
     )
