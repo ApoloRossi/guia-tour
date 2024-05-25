@@ -11,6 +11,13 @@ class PlacesRepositoryImpl @Inject constructor(
     private val local: PlacesLocalDataSource
 ) : PlacesRepository {
 
+    override suspend fun fetchMostSeenCategories() =
+        remote.fetchMostSeenCategories().map {
+            println("Request collected, save local $it")
+            //local.saveCategoriesToLocal(it)
+            it
+        }
+
     override suspend fun fetchPlacesByCategory(category: String) =
         run {
             delay(2000)

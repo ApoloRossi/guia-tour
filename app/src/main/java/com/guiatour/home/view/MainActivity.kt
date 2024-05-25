@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.fetchPlaces()
             }
         }

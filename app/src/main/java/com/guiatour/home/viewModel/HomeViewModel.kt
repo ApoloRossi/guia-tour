@@ -3,6 +3,7 @@ package com.guiatour.home.viewModel
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guiatour.home.usecase.PlacesUseCase
@@ -27,7 +28,8 @@ class HomeViewModel @Inject constructor(
             fetchBares()
             fetchParques()
             fetchBaladas()
-            fetchMock()
+            fetchMostSeenCategories()
+            //fetchMock()
         }
     }
 
@@ -57,6 +59,14 @@ class HomeViewModel @Inject constructor(
             return hasCapability
         }
         return true
+    }
+
+    private fun fetchMostSeenCategories() {
+        viewModelScope.launch {
+            placesUseCase.fetchMostSeenCategories().collect {
+                homeUIMutable.emit(it)
+            }
+        }
     }
 
     private fun fetchParques() {

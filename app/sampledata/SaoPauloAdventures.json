@@ -1,0 +1,25 @@
+{
+  "category": "Aventuras em São Paulo",
+  "places_by_category": [
+    {
+      "name": "Parque do Ibirapuera",
+      "description": "Jaraguá",
+      "image": "Jaraguá"
+    },
+    {
+      "name": "Catedral da Sé",
+      "description": "Jaraguá",
+      "image": "Jaraguá"
+    },
+    {
+      "name": "Mercadão Municipal",
+      "description": "Jaraguá",
+      "image": "Jaraguá"
+    },
+    {
+      "name": "Parque Vila Lobos",
+      "description": "Jaraguá",
+      "image": "Jaraguá"
+    }
+  ]
+}

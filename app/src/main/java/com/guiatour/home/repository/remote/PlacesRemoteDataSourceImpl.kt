@@ -2,6 +2,7 @@ package com.guiatour.home.repository.remote
 
 import com.guiatour.home.data.Place
 import com.guiatour.home.data.Places
+import com.guiatour.home.repository.service.MostViewedService
 import com.guiatour.home.repository.service.ParksService
 import com.guiatour.home.repository.service.PartiesService
 import com.guiatour.home.repository.service.PubsService
@@ -26,6 +27,14 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
         .build()
         .create(clazz)
 
+    override suspend fun fetchMostSeenCategories() = flow {
+        println("Start request remote: Categories")
+        val categories = createBuilder(MostViewedService::class.java).fetchMostSeenCategories()
+        emit(categories)
+    }.catch {
+        throw it
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun fetchPlacesByCategory(category: String) = flow {
         println("Start request remote: $category")
         val places = when (category) {
@@ -48,8 +57,11 @@ class PlacesRemoteDataSourceImpl @Inject constructor() : PlacesRemoteDataSource 
                 createBuilder(PartiesService::class.java).fetchParties()
                 //Places("Baladas", emptyList())
                 //throw Exception("Error")
-            } else -> {
-                Places(category,
+            }
+
+            else -> {
+                Places(
+                    category,
                     listOf(
                         Place(name = "Mock1", description = "Mock", image = "Mock"),
                         Place(name = "Mock2", description = "Mock", image = "Mock"),
