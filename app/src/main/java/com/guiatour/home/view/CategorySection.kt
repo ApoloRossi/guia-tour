@@ -28,7 +28,7 @@ fun CategorySection(
             .fillMaxWidth()
     ) {
         items(categories.placesByCategory.size) { place ->
-            PlacesListForCategory(categories.placesByCategory[place].name) {
+            PlacesListForCategory(categories.placesByCategory[place].name, categories.placesByCategory[place].image) {
                 onItemClicked(categories.placesByCategory[place])
             }
         }
