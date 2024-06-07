@@ -1,4 +1,4 @@
-package com.guiatour.home.view
+package com.guiatour.home.view.components
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat

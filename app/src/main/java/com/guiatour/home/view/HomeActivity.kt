@@ -14,6 +14,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.guiatour.home.data.Place
+import com.guiatour.home.view.components.EmptyComponent
+import com.guiatour.home.view.components.ErrorComponent
+import com.guiatour.home.view.components.InternetErrorComponent
+import com.guiatour.home.view.components.LoaderComponent
+import com.guiatour.home.view.components.SearchInputField
+import com.guiatour.home.view.components.SnackBarComponent
+import com.guiatour.home.view.components.categoriesList
 import com.guiatour.home.viewModel.HomeViewModel
 import com.guiatour.home.viewModel.HomeUIState
 import com.guiatour.ui.theme.GuiaTourTheme
@@ -22,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class HomeActivity : ComponentActivity() {
 
     private val viewModel: HomeViewModel by viewModels()
 

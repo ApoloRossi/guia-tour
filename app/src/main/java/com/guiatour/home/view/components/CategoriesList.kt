@@ -1,4 +1,4 @@
-package com.guiatour.home.view
+package com.guiatour.home.view.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyListScope

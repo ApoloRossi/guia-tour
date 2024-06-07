@@ -1,4 +1,4 @@
-package com.guiatour.home.view
+package com.guiatour.home.view.components
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -36,19 +36,15 @@ fun PlacesListForCategoryPreview() {
     PlacesListForCategory("Avenida Paulista", "", {})
 }
 
-@Composable
-fun PlacesListForCategory(name: String, imageURL: String, onClick: () -> Unit = {}) {
+fun getImageBitmapFromUrl(url: String): ImageBitmap? {
 
-    var drawable by remember {
-        mutableStateOf<ImageBitmap?>(null)
-    }
-
+    var loadedBitmap: ImageBitmap? = null
     val picasso = Picasso.get()
 
     val target = (object : com.squareup.picasso.Target {
 
         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-            drawable = bitmap?.asImageBitmap()
+            loadedBitmap = bitmap?.asImageBitmap()
             // You can use this bitmap to load image in image view
         }
 
@@ -61,7 +57,19 @@ fun PlacesListForCategory(name: String, imageURL: String, onClick: () -> Unit = 
         }
     })
 
-    picasso.load(imageURL).into(target)
+    picasso.load(url).into(target)
+
+    return loadedBitmap
+}
+
+@Composable
+fun PlacesListForCategory(name: String, imageURL: String, onClick: () -> Unit = {}) {
+
+    var drawable by remember {
+        mutableStateOf<ImageBitmap?>(null)
+    }
+
+    drawable = getImageBitmapFromUrl(imageURL)
 
     Column(
         modifier = Modifier

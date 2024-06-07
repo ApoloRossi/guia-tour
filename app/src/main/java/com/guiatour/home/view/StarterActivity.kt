@@ -26,7 +26,7 @@ class StarterActivity : ComponentActivity() {
     @Composable
     fun StarterScreen() {
         Column {
-            Button(onClick = { startActivity(Intent(this@StarterActivity, MainActivity::class.java)) }) {
+            Button(onClick = { startActivity(Intent(this@StarterActivity, HomeActivity::class.java)) }) {
                 Text(text = "Init Guia tour App")
             }
 
