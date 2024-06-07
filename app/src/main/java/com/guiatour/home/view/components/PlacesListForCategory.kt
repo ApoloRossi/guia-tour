@@ -28,38 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.guiatour.extensions.getImageBitmapFromUrl
 import com.squareup.picasso.Picasso
 
 @Preview(showBackground = true)
 @Composable
 fun PlacesListForCategoryPreview() {
     PlacesListForCategory("Avenida Paulista", "", {})
-}
-
-fun getImageBitmapFromUrl(url: String): ImageBitmap? {
-
-    var loadedBitmap: ImageBitmap? = null
-    val picasso = Picasso.get()
-
-    val target = (object : com.squareup.picasso.Target {
-
-        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-            loadedBitmap = bitmap?.asImageBitmap()
-            // You can use this bitmap to load image in image view
-        }
-
-        override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-            // You can use this bitmap to load image in image view
-        }
-
-        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
-        }
-    })
-
-    picasso.load(url).into(target)
-
-    return loadedBitmap
 }
 
 @Composable
@@ -69,7 +44,7 @@ fun PlacesListForCategory(name: String, imageURL: String, onClick: () -> Unit = 
         mutableStateOf<ImageBitmap?>(null)
     }
 
-    drawable = getImageBitmapFromUrl(imageURL)
+    drawable = imageURL.getImageBitmapFromUrl()
 
     Column(
         modifier = Modifier
