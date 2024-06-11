@@ -12,7 +12,9 @@ steps:
   - name: Build SampleApplication
     run: ./gradlew --no-daemon build
 on:
-  push: {}
+  push:
+    branches:
+      - main  # ou o nome do seu branch principal
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
