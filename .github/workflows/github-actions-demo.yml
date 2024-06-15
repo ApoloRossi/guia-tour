@@ -1,5 +1,7 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+env:
+  main_module: app
 on:
   push:
     branches:
@@ -51,6 +53,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           #name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) debug generated
-          path: build
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/
       - name: Print job status
         run: echo "🍏 This job's status is ${{ job.status }}."
