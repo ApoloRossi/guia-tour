@@ -47,5 +47,7 @@ jobs:
           ls ${{ github.workspace }}
       - name: Build Debug APK
         run: ./gradlew assembleDebug
+      - name: Upload APK Debug
+        uses: actions/upload-artifact@v3
       - name: Print job status
         run: echo "🍏 This job's status is ${{ job.status }}."
